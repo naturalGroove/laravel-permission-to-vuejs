@@ -1,7 +1,12 @@
+import { usePage } from '@inertiajs/vue3'
+
+const page = usePage();
+
 export default {
     install: (app, options) => {
         app.config.globalProperties.can = function (value) {
-            let permissions = (options.inertiaJS) ? options.accessRights.permissions : window.Laravel.jsPermissions.permissions
+
+            let permissions = (options.inertiaJS) ? page.props.auth.accessRights.permissions : window.Laravel.jsPermissions.permissions
             let _return = false
 
             //console.log(permissions);
@@ -12,7 +17,7 @@ export default {
 
             // allow all if superiorRole is defined in options and current user has superiorRole
             if (options.superiorRole) {
-                let roles = (options.inertiaJS) ? options.accessRights.roles : window.Laravel.jsPermissions.roles
+                let roles = (options.inertiaJS) ? page.props.auth.accessRights.roles : window.Laravel.jsPermissions.roles
 
                 if (roles.includes(options.superiorRole)) {
                     return true
@@ -51,7 +56,8 @@ export default {
             return _return
         }
         app.config.globalProperties.is = function (value) {
-            let roles = (options.inertiaJS) ? options.accessRights.roles : window.Laravel.jsPermissions.roles
+
+            let roles = (options.inertiaJS) ? page.props.auth.accessRights.roles : window.Laravel.jsPermissions.roles
             let _return = false
 
             if (roles == 0) {
